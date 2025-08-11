@@ -1,0 +1,92 @@
+# === airflow-docker-template ===
+# This structure based on Apache Airflow + PostgreSQL + init-safe
+
+x-airflow-common:
+  &airflow-common
+  build: ./airflow
+  image: my-airflow:custom
+  environment:
+    &airflow-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__CORE__FERNET_KEY: ''
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth'
+    AIRFLOW__WEBSERVER__DEFAULT_UI_TIMEZONE: Asia/Jakarta
+    AIRFLOW__CORE__ENABLE_XCOM_PICKLING: 'true'
+    KAGGLE_CONFIG_DIR: /home/airflow/.kaggle
+    GOOGLE_APPLICATION_CREDENTIALS: /opt/airflow/credentials.json
+    GCP_PROJECT_ID: ##input your desired google bigquery project's name here
+    DISCORD_WEBHOOK: ##input your discord api's link
+  volumes:
+    - ./dags:/opt/airflow/dags
+    - ./logs:/opt/airflow/logs
+    - ./plugins:/opt/airflow/plugins
+    - ./scripts:/opt/airflow/scripts
+    - ./data:/opt/airflow/data
+    - ./credentials.json:/opt/airflow/credentials.json
+    - ./dbt:/opt/airflow/dbt
+    - ./kaggle/kaggle.json:/home/airflow/.kaggle/kaggle.json
+  user: "50000:0"
+  depends_on:
+    - postgres
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+
+  airflow-init:
+    <<: *airflow-common
+    entrypoint: /bin/bash
+    depends_on:
+      - postgres
+    command: -c "\
+      echo 'Waiting for Postgres...' && \
+      until pg_isready -h postgres -p 5432; do sleep 2; done && \
+      airflow db upgrade && \
+      airflow users create \
+        --username admin \
+        --password admin \
+        --firstname Admin \
+        --lastname User \
+        --role Admin \
+        --email admin@example.com"
+
+  webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - airflow-init
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  scheduler:
+    <<: *airflow-common
+    command: scheduler
+    depends_on:
+      - postgres
+      - airflow-init
+
+  triggerer:
+    <<: *airflow-common
+    command: triggerer
+    depends_on:
+      - postgres
+
+volumes:
+  postgres-db-volume:

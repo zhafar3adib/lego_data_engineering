@@ -1,0 +1,12 @@
+lego_dbt:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: purwadika
+      dataset: ##insert your raw schema's name
+      threads: 1
+      timeout_seconds: 300
+      keyfile: /opt/airflow/credentials.json
+      location: asia-southeast2

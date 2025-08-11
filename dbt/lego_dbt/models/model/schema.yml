@@ -1,0 +1,79 @@
+version: 2
+
+models:
+  - name: fact_inventories
+    description: fact inventories that contains inventory id and set_num
+    columns:
+      - name: id
+        description: Inventory Entry ID
+        tests:
+          - not_null
+          - unique
+      - name: set_num
+        description: LEGO set number, it can be parts or sets
+        tests:
+          - not_null
+
+  - name: dim_sets
+    description: dimension table for sets
+    columns:
+      - name: inventory_id
+        description: Inventory Entry ID
+        tests:
+          - not_null
+      - name: set_num
+        description: LEGO set number
+        tests:
+          - not_null
+      - name: quantity
+        description: total quantity
+        tests:
+          - not_null
+      - name: set_name
+        description: LEGO sets name
+        tests:
+          - not_null
+      - name: year
+        description: Sets released year
+        tests:
+          - not_null
+      - name: themes
+        description: Sets theme
+        tests:
+          - not_null
+
+  - name: dim_parts
+    description: dimension table for parts
+    columns:
+      - name: inventory_id
+        description: Inventory Entry ID
+        tests:
+          - not_null
+      - name: part_num
+        description: LEGO parts number
+        tests:
+          - not_null
+      - name: part_name
+        description: LEGO parts name
+        tests:
+          - not_null
+      - name: category_name
+        description: LEGO parts category
+        tests:
+          - not_null
+      - name: quantity
+        description: total quantity
+        tests:
+          - not_null
+      - name: is_spare
+        description: Parts is spare or not
+        tests:
+          - not_null
+      - name: color_name
+        description: Parts color
+        tests:
+          - not_null
+      - name: is_trans
+        description: Parts color is transparent or not
+        tests:
+          - not_null

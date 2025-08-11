@@ -1,0 +1,32 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: ##insert your raw schema's name 
+    tables:
+      - name: colors
+      - name: inventories
+      - name: inventory_parts
+      - name: inventory_sets
+      - name: sets
+      - name: themes
+      - name: parts
+      - name: part_categories
+
+models:
+  - name: colors
+    description: Parts color table
+  - name: inventories
+    description: Inventory Entry table
+  - name: inventory_parts
+    description: LEGO parts table
+  - name: inventory_sets
+    description: LEGO sets table
+  - name: sets
+    description: more detailed LEGO sets table
+  - name: themes
+    description: LEGO sets theme
+  - name: parts
+    description: more detailed LEGO parts table
+  - name: part_categories
+    description: LEGO parts category

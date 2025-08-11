@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: agg_inventories
+    description: |
+      Total quantity for each class and id
+    columns:
+      - name: id
+        description: Inventory Entry ID
+      - name: class
+        description: Classified between sets or parts
+      - name: quantity
+        description: Total quantity
+
+  - name: agg_sets
+    description: |
+      Total quantity for each sets and id
+    columns:
+      - name: id
+        description: Inventory Entry ID
+      - name: set_name
+        description: LEGO sets name
+      - name: year
+        description: Sets released year
+      - name: themes
+        description: Sets theme
+      - name: qty_sets
+        description: Total quantity
+
+  - name: agg_parts
+    description: |
+      Total quantity for each parts and id
+    columns:
+      - name: id
+        description: Inventory Entry ID
+      - name: category_name
+        description: Parts category
+      - name: is_spare
+        description: Parts is spare or not
+      - name: color_name
+        description: Parts color
+      - name: is_trans
+        description: Parts color is transparent or not
+      - name: qty_parts
+        description: Total quantity

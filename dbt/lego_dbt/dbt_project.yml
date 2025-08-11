@@ -1,0 +1,20 @@
+name: lego_dbt
+version: 1.0
+config-version: 2
+
+profile: lego_dbt
+model-paths: ["models"]
+
+models:
+  lego_dbt:
+    staging:
+      +schema: ##insert your staging schema's name
+      +materialized: table
+
+    model:
+      +schema: ##insert your model schema's name
+      +materialized: table
+
+    marts:
+      +schema: ##insert your mart schema's name
+      +materialized: table
