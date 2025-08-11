@@ -7,7 +7,7 @@ from google.oauth2 import service_account
 cred_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 credentials = service_account.Credentials.from_service_account_file(cred_path)
 PROJECT_ID = os.getenv("GCP_PROJECT_ID")
-DATASET_ID = "" ##input your desired table's name here
+DATASET_ID = "" ##input your desired raw schema's name here
 DATA_DIR = "/opt/airflow/data"
 
 # initialize BigQuery client

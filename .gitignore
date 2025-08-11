@@ -3,3 +3,5 @@ logs/
 plugins/
 data/
 dags/__pycache__
+.user.yml
+dbt/lego_dbt/target
