@@ -4,7 +4,7 @@ lego_dbt:
     dev:
       type: bigquery
       method: service-account
-      project: purwadika
+      project: ##insert your google bigquery project's name
       dataset: ##insert your raw schema's name
       threads: 1
       timeout_seconds: 300
