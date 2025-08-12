@@ -52,11 +52,17 @@ def test_dbt_model():
     if result.returncode != 0:
         raise Exception("DBT test failed")
 
+default_args = {
+    "on_failure_callback": notify_discord_failure, 
+}
+
+
 with DAG(
     "lego_pipeline",
     start_date=days_ago(1),
     schedule_interval="@daily",
     catchup=False,
+    default_args=default_args
 ) as dag:
 
     t1 = PythonOperator(task_id="download_data", python_callable=download_data)
